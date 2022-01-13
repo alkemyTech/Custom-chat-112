@@ -9,7 +9,7 @@ class Api::V1::UsersController < ApplicationController
 
   def show
     if admin?
-      render json: @user      
+      render json: @user
     else
       render json: UserSerializer.new(@user).serializable_hash.to_json
     end
