@@ -8,10 +8,13 @@ ruby '3.0.2'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.4', '>= 6.1.4.4'
 
+gem 'acts_as_paranoid', '~> 0.7.3' # https://rubygems.org/gems/acts_as_paranoid
 gem 'bcrypt', '~> 3.1', '>= 3.1.16' # https://rubygems.org/gems/bcrypt
 gem 'bootsnap', '>= 1.4.4', require: false # https://rubygems.org/gems/bootsnap
 gem 'dotenv-rails', '~> 2.7', '>= 2.7.6' # https://rubygems.org/gems/dotenv-rails
 gem 'jsonapi-serializer', '~> 2.2' # https://rubygems.org/gems/jsonapi-serializer
+gem 'jwt', '~> 2.3' # https://rubygems.org/gems/jwt
+gem 'pagy', '~> 5.6' # https://rubygems.org/gems/pagy
 gem 'pg', '~> 1.1' # https://rubygems.org/gems/pg
 gem 'puma', '~> 5.0' # https://rubygems.org/gems/puma
 gem 'rest-client', '~> 2.1' # Http client. https://rubygems.org/gems/rest-client
