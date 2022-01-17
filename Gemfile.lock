@@ -268,10 +268,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-20
-<<<<<<< HEAD
   ruby
-=======
->>>>>>> feat-OT112CHAT-5: list all user with user_controller, create serializer for user, update path api v1 user index on routes, add user spec
   x86_64-linux
 
 DEPENDENCIES
