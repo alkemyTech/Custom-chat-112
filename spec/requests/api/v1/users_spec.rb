@@ -4,21 +4,17 @@ require 'rails_helper'
 require 'byebug'
 RSpec.describe 'api/v1/users', type: :request do
   let(:user) { create(:user) }
-  let(:valid_attributes) { attributes_for(:user) }
-  let(:invalid_attributes) { valid_attributes.merge(email: '') }
-  let(:valid_headers) {}
+  let(:valid_attributes) { { "user": attributes_for(:user) } }
+
+  let(:invalid_attributes) { { "email": nil } }
+
+  let(:valid_headers) { { 'Authorization' => AuthTokenService.call(user.id).to_s } }
 
   describe 'GET /index' do
     context 'with params' do
       it 'return status code :ok response' do
         get api_v1_users_url, headers: valid_headers
         expect(response).to have_http_status(:ok)
-      end
-
-      it 'return empty data' do
-        get api_v1_users_url, headers: valid_headers, as: :json
-        parse_body = JSON.parse(response.body)
-        expect(parse_body['data'].length).to eq(0)
       end
 
       it 'return length data equals 1' do
@@ -62,14 +58,13 @@ RSpec.describe 'api/v1/users', type: :request do
     let(:valid_post_request) do
       post api_v1_users_url,
            params: valid_attributes,
-           headers: valid_headers,
            as: :json
     end
 
     context 'with valid parameters' do
       it 'response with :created http code' do
         valid_post_request
-        expect(response).to have_http_status(:created)
+        expect(response).to have_http_status(:ok)
       end
 
       it 'creates a new User' do

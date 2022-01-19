@@ -19,26 +19,18 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  subject(:user) { create(:user) }
+  describe 'validations' do
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:password) }
+    it { is_expected.to have_secure_password }
+    it { is_expected.to validate_presence_of(:email) }
 
-  context 'when create' do
-    it 'has an email' do
-      user.email = nil
-      expect(user).not_to be_valid
-    end
+    describe 'must save' do
+      subject(:user) { create(:user) }
 
-    it 'has a password' do
-      user.password = nil
-      expect(user).not_to be_valid
-    end
-
-    it 'has a name' do
-      user.name = nil
-      expect(user).not_to be_valid
-    end
-
-    it 'saves with good params' do
-      expect(user).to be_valid
+      it 'when good params provided' do
+        expect(user).to be_valid
+      end
     end
   end
 end

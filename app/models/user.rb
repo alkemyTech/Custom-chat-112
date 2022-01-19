@@ -18,6 +18,7 @@
 #
 class User < ApplicationRecord
   has_secure_password
+  attribute :is_admin, :boolean, default: false
 
   validates :is_admin, inclusion: { in: [true, false] }
   validates :email, presence: true, uniqueness: { case_sensitive: false }
