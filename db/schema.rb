@@ -57,4 +57,7 @@ ActiveRecord::Schema.define(version: 2022_01_19_193443) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "conversations", "users", column: "user1_id"
+  add_foreign_key "conversations", "users", column: "user2_id"
+  add_foreign_key "messages", "users"
 end
