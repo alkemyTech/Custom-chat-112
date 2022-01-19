@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BadWordDetector
   @bad_words = [/tonto/i, /cag[óo]n/i, /mierda/i, /puta/i]
 
