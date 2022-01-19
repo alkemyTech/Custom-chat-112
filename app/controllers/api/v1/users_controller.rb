@@ -16,6 +16,18 @@ module Api
         end
       end
 
+      def show
+        render json: @user.conversations
+      end
+
+      def update
+        if @user.update(user_params)
+          render json: @user, status: :ok
+        else
+          render json: @user.errors, status: :unprocessable_entity
+        end
+      end
+
       def destroy
         if @user.destroy
           head :no_content

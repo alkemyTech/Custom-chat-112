@@ -18,8 +18,18 @@
 #
 class User < ApplicationRecord
   has_secure_password
+  has_many :conversations
+  has_many :messages, through: :conversations
 
   validates :is_admin, inclusion: { in: [true, false] }
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates :name, presence: true
+
+  def conversations
+    Conversation.where('user1_id = :id OR user2_id = :id', id: id)
+  end
+
+  def messages
+    Message.where('user_id = :id', id: id)
+  end
 end
