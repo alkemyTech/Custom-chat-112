@@ -5,6 +5,7 @@
 # Table name: users
 #
 #  id              :bigint           not null, primary key
+#  config          :string
 #  email           :string           not null
 #  is_admin        :boolean          default(FALSE)
 #  name            :string           not null

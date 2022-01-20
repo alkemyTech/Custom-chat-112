@@ -3,7 +3,7 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      before_action :set_user, only: %i[update destroy]
+      before_action :set_user, only: %i[update destroy config]
 
       def index
         @users = User.all
@@ -37,6 +37,17 @@ module Api
         end
       end
 
+      # http://localhost:3000/api/v1/users/5/config?user[config]={ "upcase": "true", "downcase": "false" }
+      def config
+        # @user.config = '{ "upcase": "true", "downcase": "false" }'
+        @user.config = params[:config]
+        if @user.save
+          render json: { "status": 'configuration added successfully' }
+        else
+          render json: { "status": 'Error at configuration' }
+        end
+      end
+
       private
 
       def set_user
@@ -49,7 +60,7 @@ module Api
       end
 
       def user_params
-        params.permit(:name, :password, :email, :id)
+        params.require(:user).permit(:name, :password, :email, :config)
       end
     end
   end
