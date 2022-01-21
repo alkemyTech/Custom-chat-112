@@ -63,11 +63,7 @@ module Api
       end
 
       def user_params
-<<<<<<< HEAD
-        params.require(:user).permit(:name, :password, :email)
-=======
-        params.permit(:name, :password, :email, :id, :settings)
->>>>>>> 163291c (feat-OT112CHAT16-add-personal-configuration)
+        params.require(:user).permit(:name, :password, :email, :id, :settings)
       end
     end
   end

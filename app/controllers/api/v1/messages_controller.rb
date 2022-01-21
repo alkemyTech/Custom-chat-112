@@ -15,7 +15,7 @@ module Api
         )
         @messages.each do |chat|
           chat.each do |message|
-            if @user.settings
+            if @user.settings.include? 'true'
               @message = message
               @message.detail = settings
             end
