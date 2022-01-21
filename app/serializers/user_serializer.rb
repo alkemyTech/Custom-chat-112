@@ -9,6 +9,7 @@
 #  is_admin        :boolean          default(FALSE)
 #  name            :string           not null
 #  password_digest :string
+#  settings        :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
