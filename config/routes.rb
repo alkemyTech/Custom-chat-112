@@ -7,11 +7,9 @@ Rails.application.routes.draw do
       post 'auth/register', to: 'users#create'
       post 'auth/login', to: 'auth#create'
       get 'auth/me', to: 'auth#show'
-      resources :chats, only: [:show] do
-        resources :messages, only: [:index]
+      resources :conversations, only: [:show] do
+        resources :messages, only: %i[index create]
       end
-      post 'auth/register', to: 'users#create'
-      post 'auth/login', to: 'auth#create'
     end
   end
 end

@@ -10,27 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_13_233047) do
+ActiveRecord::Schema.define(version: 2022_01_24_000711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "conversation_users", force: :cascade do |t|
+    t.bigint "conversation_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["conversation_id"], name: "index_conversation_users_on_conversation_id"
+    t.index ["user_id"], name: "index_conversation_users_on_user_id"
+  end
+
   create_table "conversations", force: :cascade do |t|
-    t.bigint "user1_id", null: false
-    t.bigint "user2_id", null: false
     t.string "state"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user1_id"], name: "index_conversations_on_user1_id"
-    t.index ["user2_id"], name: "index_conversations_on_user2_id"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_conversations_on_deleted_at"
   end
 
   create_table "messages", force: :cascade do |t|
+    t.bigint "conversation_id", null: false
     t.bigint "user_id", null: false
     t.string "detail", null: false
     t.boolean "modified", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
+    t.index ["deleted_at"], name: "index_messages_on_deleted_at"
     t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
@@ -44,7 +55,8 @@ ActiveRecord::Schema.define(version: 2022_01_13_233047) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  add_foreign_key "conversations", "users", column: "user1_id"
-  add_foreign_key "conversations", "users", column: "user2_id"
+  add_foreign_key "conversation_users", "conversations"
+  add_foreign_key "conversation_users", "users"
+  add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users"
 end

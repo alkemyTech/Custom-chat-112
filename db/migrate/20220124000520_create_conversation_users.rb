@@ -1,10 +1,9 @@
-class CreateMessagesTable < ActiveRecord::Migration[6.1]
+class CreateConversationUsers < ActiveRecord::Migration[6.1]
   def change
-    create_table :messages do |t|
+    create_table :conversation_users do |t|
       t.references :conversation, null: false, foreign_key: true
       t.references :user, null: false, foreign_key: true
-      t.string :detail, null: false
-      t.boolean :modified, default: false
+
       t.timestamps
     end
   end
