@@ -5,6 +5,7 @@ module Api
     class MessagesController < ApplicationController
       before_action :authorize_request
       before_action :set_conversation, only: %i[index create]
+      before_action :set_message, only: %i[update]
       after_action { pagy_headers_merge(@pagy) if @pagy }
 
       def index
@@ -46,10 +47,33 @@ module Api
         end
       end
 
+      def update
+        if owner? && last_message?
+          @message.modified = true
+          if @message.update(message_params)
+            render json: MessageSerializer.new(@message).serializable_hash.to_json
+          else
+            render json: @message.errors, status: :unprocessable_entity
+          end
+        else
+          render json: { error: "Could not edit message with ID '#{params[:id]}'" },
+          status: :unprocessable_entity
+        end
+      end
+
       private
 
       def set_conversation
         @conversation = @current_user.conversations.find_by(id: params[:conversation_id])
+      end
+
+      def set_message
+        @message = Message.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        render json:
+        {
+          error: "Could not find message with ID '#{params[:id]}'"
+        }, status: :not_found
       end
 
       def max_users?
@@ -69,6 +93,14 @@ module Api
 
       def message_params
         params.require(:message).permit(:detail, :modified)
+      end
+
+      def owner?
+        @message.user == @current_user
+      end
+
+      def last_message?
+        @message.conversation.messages.where(user: @current_user).last == @message
       end
     end
   end
