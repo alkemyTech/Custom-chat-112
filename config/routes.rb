@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       resources :conversations, only: [:show] do
         resources :messages, only: %i[index create]
       end
+      resources :messages, only: %i[update]
     end
   end
 end
