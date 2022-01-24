@@ -5,6 +5,7 @@ module Api
     class MessagesController < ApplicationController
       before_action :authorize_request
       before_action :set_conversation, only: %i[index create]
+      before_action :set_message, only: %i[show]
       after_action { pagy_headers_merge(@pagy) if @pagy }
 
       def index
@@ -23,6 +24,16 @@ module Api
         end
         @messages.order(created_at: :desc)
         render json: MessageSerializer.new(@messages).serializable_hash.to_json
+      end
+
+      def show
+        if owner?
+          render json: {
+            'data': @message
+          }, status: :ok
+        else
+          render json: MessageSerializer.new(@message).serializable_hash.to_json, status: :ok
+        end
       end
 
       def create
@@ -50,6 +61,20 @@ module Api
 
       def set_conversation
         @conversation = @current_user.conversations.find_by(id: params[:conversation_id])
+      rescue ActiveRecord::RecordNotFound
+        render json:
+        {
+          error: "Could not find conversation with ID '#{params[:id]}'"
+        }, status: :not_found
+      end
+
+      def set_message
+        @message = Message.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        render json:
+        {
+          error: "Could not find message with ID '#{params[:id]}'"
+        }, status: :not_found
       end
 
       def max_users?
@@ -69,6 +94,10 @@ module Api
 
       def message_params
         params.require(:message).permit(:detail, :modified)
+      end
+
+      def owner?
+        @message.user == @current_user
       end
     end
   end
