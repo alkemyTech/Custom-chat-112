@@ -5,7 +5,6 @@ module Api
     class MessagesController < ApplicationController
       before_action :authorize_request
       before_action :set_conversation, only: %i[index create]
-      after_action { pagy_headers_merge(@pagy) if @pagy }
 
       def index
         @pagy, @messages = pagy(
@@ -13,12 +12,10 @@ module Api
           items: params[:items] || 10,
           page: params[:page] || 1
         )
-        @messages.each do |chat|
-          chat.each do |message|
-            if @user.settings.include? 'true'
-              @message = message
-              @message.detail = settings
-            end
+        @messages.each do |message|
+          if @current_user.settings.include? 'true'
+            @message = message
+            @message.detail = settings
           end
         end
         @messages.order(created_at: :desc)
@@ -36,7 +33,7 @@ module Api
           @conversation.users << @current_user
           @message = @conversation.messages.build(message_params)
           @message.user = @current_user
-          @message.detail = settings if @user.settings.include? 'true'
+          @message.detail = settings if @current_user.settings.include? 'true'
 
           if @message.save
             render json: MessageSerializer.new(@message), status: :created
