@@ -36,7 +36,7 @@ module Api
           @conversation.users << @current_user
           @message = @conversation.messages.build(message_params)
           @message.user = @current_user
-          @message.detail = settings if @user.settings.include? 'true'
+          @message.detail = settings if @current_user.settings.include? 'true'
 
           if @message.save
             render json: MessageSerializer.new(@message), status: :created
